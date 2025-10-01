@@ -3,9 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Lista completa com 75 itens únicos (25 de cada categoria)
 const geekItems = [
-  // === GAMES (25 itens) ===
   {
     title: "The Legend of Zelda: Breath of the Wild",
     description: "Aventura épica em mundo aberto em Hyrule.",

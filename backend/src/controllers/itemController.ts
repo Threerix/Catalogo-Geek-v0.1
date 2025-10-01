@@ -53,9 +53,6 @@ export const getItemById = async (req: Request, res: Response) => {
       where: {
         id: parseInt(id),
       },
-      // --- MUDANÇA PRINCIPAL AQUI ---
-      // Pedimos ao Prisma para incluir na resposta todos os 'reviews'
-      // relacionados a este item.
       include: {
         reviews: {
           // Opcional: ordena os reviews para que os mais recentes apareçam primeiro.

@@ -38,14 +38,12 @@ router.get("/items/:id", getItemById);
 router.put("/items/:id", updateItem);
 router.delete("/items/:id", deleteItem);
 
-// --- NOVAS ROTAS PROTEGIDAS DE REVIEWS ---
 // Criar um review para um item específico
 router.post("/items/:itemId/reviews", authMiddleware, createReview);
 
 // Obter todas as reviews do usuário logado (+ count)
 router.get("/me/reviews", authMiddleware, getUserReviews);
 
-// --- NOVAS ROTAS PARA BATCH E FILTROS ---
 // Rota para popular o banco com itens geeks pré-definidos
 router.post("/populate", populateWithGeekItems);
 
