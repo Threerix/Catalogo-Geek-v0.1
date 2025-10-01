@@ -1,0 +1,25 @@
+// backend/tsconfig.json
+{
+  "compilerOptions": {
+    /* 1. CONFIGURAÇÕES DO AMBIENTE E MÓDULOS (AS MAIS IMPORTANTES) */
+    "target": "ES2020",                                /* Define a versão do JavaScript para a qual o código será compilado. ES2020 é moderno e bem suportado pelo Node.js. */
+    "module": "CommonJS",                              /* A MUDANÇA PRINCIPAL: Diz ao TypeScript para gerar código no formato CommonJS (`require`), que é o padrão do Node.js. */
+    "moduleResolution": "Node",                        /* Usa a estratégia de resolução de módulos do Node.js (procurar em `node_modules`). */
+    "lib": ["ES2020"],                                 /* Inclui as bibliotecas de tipos padrão para a versão do JavaScript que estamos usando. */
+    "esModuleInterop": true,                           /* ESSENCIAL: Permite que `import express from 'express'` funcione, melhorando a compatibilidade entre módulos ESM e CJS. */
+    
+    /* 2. ESTRUTURA DE ARQUIVOS */
+    "rootDir": "./src",                                /* Informa que nosso código fonte está na pasta `src`. */
+    "outDir": "./dist",                                /* Informa que o código JavaScript compilado deve ser salvo na pasta `dist`. */
+
+    /* 3. VERIFICAÇÃO DE TIPOS (MANTENDO A QUALIDADE) */
+    "strict": true,                                    /* Habilita todas as verificações estritas de tipo, o que é uma excelente prática. */
+    "forceConsistentCasingInFileNames": true,          /* Evita erros em sistemas operacionais que não diferenciam maiúsculas de minúsculas (ex: Windows). */
+    "skipLibCheck": true,                              /* Pula a verificação de tipos em arquivos de declaração (`.d.ts`), o que acelera a compilação. */
+
+    /* REMOVEMOS OU AJUSTAMOS */
+    // "verbatimModuleSyntax": true,                    // REMOVIDO: Esta era a regra que causava o conflito. Ela é muito estrita para nosso caso de uso.
+    // "jsx": "react-jsx",                              // REMOVIDO: Esta opção é para projetos React. Nosso backend não usa JSX.
+    // "isolatedModules": true,                         // REMOVIDO: Mais relevante para transpiladores como o Babel, não estritamente necessário para `ts-node-dev`.
+  }
+}

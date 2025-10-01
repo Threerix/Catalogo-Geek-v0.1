@@ -1,0 +1,77 @@
+// Este arquivo é a "fonte da verdade" para a estrutura do nosso banco de dados.
+// Qualquer alteração na estrutura de dados deve ser feita aqui primeiro.
+
+// Bloco 1: Configuração do Cliente e da Fonte de Dados
+// ====================================================
+
+// Define qual banco de dados estamos usando. Já fizemos isso com o comando `init`.
+datasource db {
+  provider = "postgresql" // Estamos dizendo ao Prisma para "falar a língua" do PostgreSQL.
+  url      = env("DATABASE_URL") // Informa ao Prisma para pegar a URL de conexão do nosso arquivo .env. Isso é crucial para a segurança.
+}
+
+// Define o gerador de cliente.
+generator client {
+  provider = "prisma-client-js" // Diz ao Prisma para gerar o "Prisma Client" - um conjunto de código TypeScript que usaremos para interagir com o banco de dados de forma segura e com autocomplete.
+}
+
+// Bloco 2: Definição dos Nossos Modelos (Tabelas)
+// ================================================
+
+// Enum: Um tipo especial que restringe uma variável a um conjunto de valores pré-definidos.
+// Usamos isso para garantir que um item só possa ser do tipo JOGO, ANIME ou MANGÁ, evitando erros de digitação.
+enum ItemType {
+  GAME
+  ANIME
+  MANGA
+}
+
+// Modelo de Usuário (Isso será traduzido para a tabela 'User' no banco de dados).
+model User {
+  id        Int      @id @default(autoincrement()) // `@id` define esta coluna como a chave primária. `@default(autoincrement())` faz com que o banco de dados gere um número sequencial único para cada novo usuário (1, 2, 3...).
+  email     String   @unique                       // `@unique` garante que não possam existir dois usuários com o mesmo e-mail. O banco de dados irá impor essa regra.
+  name      String
+  password  String                                 // Vamos armazenar a senha criptografada aqui. Nunca em texto puro!
+  createdAt DateTime @default(now())               // `@default(now())` preenche automaticamente a data e hora de criação quando um novo usuário é inserido.
+  avatarUrl String? 
+
+  // O campo do RELACIONAMENTO:
+  // Este campo 'reviews' não existe como uma coluna no banco de dados 'User'.
+  // É uma representação virtual do Prisma que nos diz: "Um usuário pode ter uma LISTA de reviews".
+  // O `[]` indica que é uma lista (relacionamento de um-para-muitos).
+  reviews Review[]
+}
+
+// Modelo de Item do Catálogo (Isso será a tabela 'Item').
+model Item {
+  id          Int      @id @default(autoincrement())
+  title       String   @unique
+  description String   @db.Text // @db.Text é uma dica para o banco de dados usar um tipo de texto mais longo, se necessário.
+  type        ItemType // O tipo deste campo será um dos valores do nosso `enum ItemType`.
+  releaseDate DateTime
+  imageUrl    String?  // A `?` no final do tipo `String` significa que este campo é OPCIONAL. Um item pode ser cadastrado sem uma imagem.
+
+  // O campo do RELACIONAMENTO:
+  // Assim como no User, isso nos diz que "Um item pode ter uma LISTA de reviews".
+  reviews Review[]
+}
+
+// Modelo de Review (Isso será a tabela 'Review').
+// Esta é uma "tabela de junção" que conecta User e Item.
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int      // A nota, por exemplo, de 1 a 10. (Podemos adicionar validações depois no código).
+  comment   String?  @db.Text // O comentário também é opcional.
+  createdAt DateTime @default(now())
+
+  // RELACIONAMENTOS REAIS (Chaves Estrangeiras):
+  // Aqui é onde a mágica acontece.
+
+  // 1. Conexão com User:
+  userId Int  // Esta será uma coluna real no banco de dados para armazenar o ID do usuário que escreveu o review.
+  user   User @relation(fields: [userId], references: [id]) // Esta linha diz ao Prisma: "O campo `userId` acima está relacionado ao campo `id` do modelo `User`". Isso cria a chave estrangeira.
+
+  // 2. Conexão com Item:
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id]) // E esta linha diz: "O campo `itemId` acima está relacionado ao campo `id` do modelo `Item`".
+}

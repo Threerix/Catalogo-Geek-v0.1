@@ -1,0 +1,28 @@
+# catalogo-geek/docker-compose.yml
+
+# Versão do formato do arquivo docker-compose.
+version: '3.8'
+
+# Seção onde definimos nossos serviços (contêineres).
+services:
+  # Nome do nosso serviço. Vamos chamá-lo de 'db'.
+  db:
+    # A imagem que o Docker usará para criar o contêiner.
+    # Usaremos a imagem oficial do PostgreSQL, versão 13.
+    image: postgres:13
+    # Garante que o contêiner reinicie automaticamente se ele parar.
+    restart: always
+    # Variáveis de ambiente para configurar o banco de dados.
+    # IMPORTANTE: Use estes mesmos valores no seu arquivo .env
+    environment:
+      POSTGRES_USER: meu_usuario
+      POSTGRES_PASSWORD: minha_senha
+      POSTGRES_DB: catalogo_geek
+    # Mapeamento de portas: conecta a porta 5432 da sua máquina (localhost)
+    # com a porta 5432 de dentro do contêiner.
+    ports:
+      - "5432:5432"
+    # Volumes: Mapeia a pasta 'postgres_data' no seu PC para a pasta de dados
+    # do PostgreSQL dentro do contêiner. Isso garante que seus dados não sejam perdidos.
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data

@@ -1,0 +1,22 @@
+/* frontend/src/index.css */
+
+/*
+  Este arquivo define os estilos mais básicos e globais,
+  garantindo que a estrutura principal do HTML ocupe toda a tela.
+*/
+
+html,
+body,
+#root {
+  /* Garante que a estrutura base ocupe 100% da altura da janela do navegador. */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /* Define a família de fontes padrão para toda a aplicação. */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* 
+  As variáveis de cor, fundo e outros estilos mais específicos
+  serão definidos no App.css para manter este arquivo limpo.
+*/
